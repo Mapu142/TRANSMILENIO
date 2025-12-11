@@ -7,6 +7,16 @@ import folium
 from streamlit_folium import st_folium
 
 import os, sys
+import traceback
+
+def catch_errors():
+    try:
+        yield
+    except Exception:
+        st.error("Error en la aplicación:")
+        st.code(traceback.format_exc())
+
+with catch_errors():
 print(">>> Ejecutando archivo:", os.path.abspath(__file__))
 print("Python ejecutado:", sys.executable)
 
