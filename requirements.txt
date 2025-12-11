@@ -1,0 +1,22 @@
+# requirements.txt para app GTFS Bogotá
+
+# Core de la app
+streamlit==1.28.0
+
+# Procesamiento de datos
+pandas==2.1.4
+numpy==1.24.3
+
+# Geoprocesamiento
+geopandas==0.14.0
+shapely==2.0.1
+pyproj==3.6.1
+fiona==1.9.5
+
+# Mapas visualización
+folium==0.15.0
+streamlit-folium==0.15.1
+branca==0.6.0
+
+# Utilidades
+chardet==5.2.0  # para detectar encoding de archivos
