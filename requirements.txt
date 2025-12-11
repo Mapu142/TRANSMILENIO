@@ -1,10 +1,10 @@
 streamlit==1.38.0
 pandas
 geopandas==0.14.4
-shapely==2.0.6
 folium
 streamlit-folium
-pyogrio==0.9.0          # este es el truco mágico
-fiona==1.10.1
-numpy<2.0               # importante para evitar romper geopandas
+shapely==2.0.6
+pyogrio==0.9.0          # ← este es el héroe (usa GDAL precompilado, no necesita libgdal-dev)
+numpy<2.0
 pyproj==3.6.1
+fiona==1.10.1
