@@ -1,4 +1,5 @@
 import streamlit as st
+from pyproj import CRS
 import pandas as pd
 import geopandas as gpd
 from shapely.geometry import LineString, Point
@@ -25,7 +26,8 @@ shapes_gdf = (
 )
 
 shapes_gdf.columns = ["shape_id", "geometry"]
-shapes_gdf = gpd.GeoDataFrame(shapes_gdf, geometry="geometry", crs="EPSG:4326")
+crs_obj = CRS.from_epsg(4326)  # Crea el objeto CRS correctamente
+shapes_gdf = gpd.GeoDataFrame(shapes_gdf, geometry="geometry", crs=crs_obj)
 
 # =========================
 #   UI
