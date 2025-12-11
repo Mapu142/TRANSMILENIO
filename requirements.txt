@@ -1,18 +1,9 @@
---python-version 3.11
-
-# Streamlit Community Cloud - Python 3.10/3.11 compatible
 streamlit==1.28.0
-
-# Versiones compatibles con Python 3.10/3.11
-pandas==1.5.3  # Versión más estable y compatible
+pandas==1.5.3
 numpy==1.24.3
-
-# Para geopandas y dependencias espaciales en Streamlit Cloud
 geopandas==0.13.2
 shapely==2.0.1
 pyproj==3.6.1
 fiona==1.9.4.post1
-
-# Mapas
 folium==0.14.0
 streamlit-folium==0.15.0
