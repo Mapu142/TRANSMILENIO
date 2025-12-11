@@ -1,22 +1,16 @@
-# requirements.txt para app GTFS Bogotá
-
-# Core de la app
+# Streamlit Community Cloud - Python 3.10/3.11 compatible
 streamlit==1.28.0
 
-# Procesamiento de datos
-pandas==2.1.4
+# Versiones compatibles con Python 3.10/3.11
+pandas==1.5.3  # Versión más estable y compatible
 numpy==1.24.3
 
-# Geoprocesamiento
-geopandas==0.14.0
+# Para geopandas y dependencias espaciales en Streamlit Cloud
+geopandas==0.13.2
 shapely==2.0.1
 pyproj==3.6.1
-fiona==1.9.5
+fiona==1.9.4.post1
 
-# Mapas visualización
-folium==0.15.0
-streamlit-folium==0.15.1
-branca==0.6.0
-
-# Utilidades
-chardet==5.2.0  # para detectar encoding de archivos
+# Mapas
+folium==0.14.0
+streamlit-folium==0.15.0
