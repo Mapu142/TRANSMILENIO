@@ -1,0 +1,122 @@
+Metadata-Version: 2.4
+Name: mappymatch
+Version: 0.6.1
+Summary: Pure python package for map-matching.
+Project-URL: Homepage, https://github.com/NREL/mappymatch
+Author: National Renewable Energy Laboratory
+License: BSD 3-Clause License Copyright (c) 2022, Alliance for Sustainable Energy, LLC
+License-File: LICENSE
+Keywords: GPS,map,match
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: Other/Proprietary License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Scientific/Engineering
+Requires-Python: >=3.9
+Requires-Dist: folium
+Requires-Dist: geopandas>=1
+Requires-Dist: igraph
+Requires-Dist: matplotlib
+Requires-Dist: networkx
+Requires-Dist: numpy
+Requires-Dist: osmnx>=2
+Requires-Dist: pandas
+Requires-Dist: polyline
+Requires-Dist: pyproj
+Requires-Dist: requests
+Requires-Dist: rtree
+Requires-Dist: shapely>=2
+Provides-Extra: dev
+Requires-Dist: coverage; extra == 'dev'
+Requires-Dist: hatch; extra == 'dev'
+Requires-Dist: jupyter-book>=1; extra == 'dev'
+Requires-Dist: mypy>=1; extra == 'dev'
+Requires-Dist: pre-commit; extra == 'dev'
+Requires-Dist: pytest; extra == 'dev'
+Requires-Dist: ruff; extra == 'dev'
+Requires-Dist: sphinx-autodoc-typehints; extra == 'dev'
+Requires-Dist: sphinx-book-theme; extra == 'dev'
+Requires-Dist: sphinxcontrib-autoyaml; extra == 'dev'
+Requires-Dist: sphinxcontrib-mermaid; extra == 'dev'
+Requires-Dist: types-requests; extra == 'dev'
+Provides-Extra: docs
+Requires-Dist: jupyter-book>=1; extra == 'docs'
+Requires-Dist: sphinx-autodoc-typehints; extra == 'docs'
+Requires-Dist: sphinx-book-theme; extra == 'docs'
+Requires-Dist: sphinxcontrib-autoyaml; extra == 'docs'
+Requires-Dist: sphinxcontrib-mermaid; extra == 'docs'
+Provides-Extra: tests
+Requires-Dist: mypy>=1; extra == 'tests'
+Requires-Dist: pytest; extra == 'tests'
+Requires-Dist: ruff; extra == 'tests'
+Requires-Dist: types-requests; extra == 'tests'
+Description-Content-Type: text/markdown
+
+# mappymatch
+
+Mappymatch is a pure-python package developed and open sourced by the National Renewable Energy Laboratory. It contains a collection of "Matchers" that enable matching a GPS trace (series of GPS coordinates) to a map.
+
+![Map Matching Animation](docs/images/map-matching.gif?raw=true)
+
+The current matchers are:
+
+- `LCSSMatcher`: A matcher that implements the LCSS algorithm described in this [paper](https://doi.org/10.3141%2F2645-08). Works best with high resolution GPS traces.
+- `OsrmMatcher`: A light matcher that pings an OSRM server to request map matching results. See the [official documentation](http://project-osrm.org/) for more info.
+- `ValhallaMatcher`: A matcher to ping a [Valhalla](https://www.interline.io/valhalla/) server for map matching results.
+
+Currently supported map formats are:
+
+- Open Street Maps
+
+## Installation
+
+```console
+pip install mappymatch
+```
+
+If you have trouble with that, check out [the docs](https://nrel.github.io/mappymatch/install.html) for more detailed install instructions.
+
+## Example Usage
+
+The current primary workflow is to use [osmnx](https://github.com/gboeing/osmnx) to download a road network and match it using the `LCSSMatcher`.
+
+The `LCSSMatcher` implements the map matching algorithm described in this paper:
+
+[Zhu, Lei, Jacob R. Holden, and Jeffrey D. Gonder.
+"Trajectory Segmentation Map-Matching Approach for Large-Scale, High-Resolution GPS Data."
+Transportation Research Record: Journal of the Transportation Research Board 2645 (2017): 67-75.](https://doi.org/10.3141%2F2645-08)
+
+usage:
+
+```python
+from mappymatch import package_root
+from mappymatch.constructs.geofence import Geofence
+from mappymatch.constructs.trace import Trace
+from mappymatch.maps.nx.nx_map import NxMap
+from mappymatch.matchers.lcss.lcss import LCSSMatcher
+
+trace = Trace.from_csv(package_root() / "resources/traces/sample_trace_1.csv")
+
+# generate a geofence polygon that surrounds the trace; units are in meters;
+# this is used to query OSM for a small map that we can match to
+geofence = Geofence.from_trace(trace, padding=1e3)
+
+# uses osmnx to pull a networkx map from the OSM database
+nx_map = NxMap.from_geofence(geofence)
+
+matcher = LCSSMatcher(nx_map)
+
+matches = matcher.match_trace(trace)
+
+# convert the matches to a dataframe
+df = matches.matches_to_dataframe()
+```
+
+## Example Notebooks
+
+Check out the [LCSS Example](https://nrel.github.io/mappymatch/lcss-example.html) for a more detailed example of working with the LCSSMatcher.
